@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 
-class CurrencyConverterMaterial extends StatelessWidget {
+class CurrencyConverterMaterial extends StatefulWidget {
   const CurrencyConverterMaterial({super.key});
+
+  @override
+  State<CurrencyConverterMaterial> createState() =>
+      _CurrencyConverterMaterialState();
+}
+
+class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
+  double result = 0;
+  final texteditingcontroller = TextEditingController();
+  void convert() {
+    setState(() {
+      result = double.parse(texteditingcontroller.text) * 145;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    double result = 0;
-    final texteditingcontroller = TextEditingController();
     final border = OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black,
@@ -35,7 +48,7 @@ class CurrencyConverterMaterial extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              result.toString(),
+              "NRP $result",
               style: TextStyle(
                 fontSize: 55,
                 fontWeight: FontWeight.bold,
@@ -63,9 +76,7 @@ class CurrencyConverterMaterial extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: ElevatedButton(
-                onPressed: () {
-                  result = double.parse(texteditingcontroller.text) * 145;
-                },
+                onPressed: convert,
                 style: ElevatedButton.styleFrom(
                   elevation: 20,
                   backgroundColor: Colors.black,
@@ -75,6 +86,7 @@ class CurrencyConverterMaterial extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+
                 child: Text("Convert"),
               ),
             ),
