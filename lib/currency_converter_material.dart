@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CurrencyConverterMaterial extends StatefulWidget {
   const CurrencyConverterMaterial({super.key});
@@ -18,6 +19,17 @@ class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    texteditingcontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final border = OutlineInputBorder(
       borderSide: BorderSide(
@@ -32,7 +44,7 @@ class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
     return Scaffold(
       backgroundColor: Colors.blueGrey,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.black,
         title: Text(
           "Currency Converter",
           style: TextStyle(
@@ -44,24 +56,26 @@ class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
         centerTitle: true,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "NRP $result",
-              style: TextStyle(
-                fontSize: 55,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "NRP ${result != 0 ? result.toStringAsFixed(2) : result.toStringAsFixed(0)}",
+                style: TextStyle(
+                  fontSize: 55,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
+              TextField(
                 controller: texteditingcontroller,
                 style: TextStyle(color: Colors.black),
+
                 decoration: InputDecoration(
                   hintText: "Enter amount in USD",
+
                   hintStyle: TextStyle(color: Colors.black),
                   prefixIcon: Icon(Icons.attach_money_outlined),
                   prefixIconColor: Colors.green,
@@ -71,11 +85,12 @@ class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
                   enabledBorder: border,
                 ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*')),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
+              SizedBox(height: 10),
+              ElevatedButton(
                 onPressed: convert,
                 style: ElevatedButton.styleFrom(
                   elevation: 20,
@@ -89,8 +104,8 @@ class _CurrencyConverterMaterialState extends State<CurrencyConverterMaterial> {
 
                 child: Text("Convert"),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
